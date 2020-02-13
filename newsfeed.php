@@ -10,6 +10,7 @@ if (!isset($_SESSION['id'])) {
  require('conn.php');
  require('Like.php');
  if (isset($_POST['btn'])) {
+ 	print_r($_FILES);
  	$validation= new PoatValidaion($_POST);
  	$error=$validation->validation();
  	echo $_POST['post'];
@@ -42,17 +43,18 @@ if (!isset($_SESSION['id'])) {
   $users=User::GetUser();
  $posts=Post::SelectPost();
  
- 	 
+ 	 	
 
 
  
  ?>
  <div class="head">
  	<h3>Post something</h3>
- 	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>">
+ 	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" enctype="multipart/form-data" >
  		<textarea cols="50" rows="10" name="post" id="post" placeholder="Write your post" ></textarea><br>
  		<div class="error"><?php echo $error['post']??''; ?></div>
  		<div class="success"><?php echo $submit??''; ?></div>
+ 		<input type="file" name="file" id="file" accept=".mp4, .webm , .png , .jpeg, .jpg"><br>
  		<input type="hidden" name="user_id" value="<?php echo htmlspecialchars($_SESSION['id']); ?>">
  		<input type="submit" name="btn" value="Post">
  	</form>
@@ -72,7 +74,13 @@ if (!isset($_SESSION['id'])) {
 	</div>
 	<a href="post_comment.php?id=<?php echo $post['id'];?>">
 		<div>
-			<?php echo nl2br($post['post']); ?>
+			<?php if (strlen($post['post'])<=100) {
+				echo nl2br($post['post']). "<br>";
+				echo strlen($post['post']);
+			}else{
+				echo nl2br(substr($post['post'],0,100))."... <br>";
+				echo strlen($post['post']);
+			}  ?>
 		</div>
 	</a>
 	<div>
