@@ -12,11 +12,11 @@ class Post
 		$this->data=$post_data;
 	}
 
-	public function InsertPost(){
+	public function InsertPost($file){
 		require('conn.php');
 		$post=mysqli_real_escape_string($conn, $this->data['post']);
 		$user_id=mysqli_real_escape_string($conn,$_SESSION['id']);
-		$sql="INSERT INTO `posts`(post,user_id)VALUES('$post','$user_id')";
+		$sql="INSERT INTO `posts`(post,user_id,file)VALUES('$post','$user_id','$file')";
 		$result=mysqli_query($conn, $sql);
 		if(!$result) {
 			$message= "error". mysqli_error($conn);

@@ -46,8 +46,13 @@ if (isset($_POST['delete'])) {
 ?>
 <div class="posts">
 	<h3>Posts</h3>
-	<?php foreach ($post as $post) { ?>
-	<?php if($post['id']==$post_id){  ?>
+	<?php foreach ($post as $post) { 
+		?>
+	<?php if($post['id']==$post_id){ 
+		$file=$post['file'];
+		$file_split=explode('.',$file);
+		$fileext=end($file_split);
+		?>
 	<div class="post">
 		<?php foreach ($users as $user) { ?>
 		<?php if($post['user_id']==$user['id']){  ?>
@@ -56,7 +61,20 @@ if (isset($_POST['delete'])) {
 		</div>
 		
 		<div>
-			<?php echo nl2br($post['post']);  ?>
+		<?php if(!empty($post['file'])){?>
+			<center>
+			<div>
+				<?php if($fileext!="mp4"){?>
+				<img src="<?php echo $post['file'] ; ?>" alt="" height="400px" width="50%">
+				<?php }else{ ?>
+					<video controls height="300px" width="50%" >
+						<source src="<?php echo $post['file'];?>" type="video/mp4">
+					</video>
+				<?php } ?>
+			</div>
+			</center>
+			<?php } ?>
+			<?php echo nl2br($post['post']);	 ?>
 		</div>
 	
 		<div>
