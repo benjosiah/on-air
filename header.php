@@ -22,7 +22,20 @@
 					<a href="signin.php"><li>Sign in</li></a>
 					<a href="index.php"><li>Sign up</li></a>
 				<?php } else{
-					echo '<li>'.$_SESSION['username'].'</li>';
+					echo '<a href="freinds_list.php">
+					
+					<img src="chat_icon.png" alt="profile.png" class="dp">
+					<li>
+					Message
+					</li>
+					</a>';
+					
+					echo '<a href="user_page.php?id='.$_SESSION['id'].'">
+					<img src="'. $_SESSION['image'].'" alt="profile.png" class="dp">
+					<li>'
+					.$_SESSION['username'].
+					'</li>
+					</a>';
 					echo "<a href='logout.php'><li>"."Log Out"."</li></a>";
 				} ?>
 				

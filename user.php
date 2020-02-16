@@ -40,6 +40,7 @@ class User
 			$_SESSION['id']=$details['id'];
 			$_SESSION['email']=$details['email'];
 			$_SESSION['username']=$details['username'];
+			$_SESSION['image']=$details['image'];
 			$_SESSION=$details;
 			header("location:newsfeed.php");
 
@@ -58,7 +59,53 @@ class User
 		$users=mysqli_fetch_all($result, MYSQLI_ASSOC);
 		return $users;
 	}
- 	
+	private function uploadphoto($path)
+	{
+		require('conn.php');
+		$id=$_SESSION['id'];
+		$sql="UPDATE users SET image='$path' WHERE id='$id' ";
+		$query=mysqli_query($conn, $sql);
+		if ($query) {
+			$success=true;
+			return $success;
+		}else{
+			$success=false;
+			return $success;
+		}
+	}
+
+	 public function Getfile()
+	 {
+		 $files=$this->data;
+		 $id=$_SESSION['id'];
+		 $name=$_SESSION['username'];
+		 $filename=$files['name'];
+		 $fileerror=$files['error'];
+		 $ext=explode('.',$filename);
+		 $fileext= end($ext);
+		 $filetemp=$files['tmp_name'];
+		 $filesize=$files['size'];
+		 $filenamenew= "IMG_".$name."_".$id;
+		 $filedestination="profile_pic/".$filenamenew.".".$fileext;
+		 if ($fileerror===0) {
+			$message=$this->uploadphoto($filedestination);
+			if ($message==true) {
+				if (file_exists($filedestination)) {
+					unlink($filedestination);
+					move_uploaded_file($filetemp,$filedestination);
+				}else{
+					move_uploaded_file($filetemp,$filedestination);
+				}
+				
+			}else{
+				return 'something went wrong';
+			}
+		 }else{
+		 	return "there's an error!!";
+		 }
+
+
+	 }
 }
 
 ?>

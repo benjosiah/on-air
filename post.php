@@ -12,7 +12,7 @@ class Post
 		$this->data=$post_data;
 	}
 
-	public function InsertPost($file){
+	public function InsertPost($file=''){
 		require('conn.php');
 		$post=mysqli_real_escape_string($conn, $this->data['post']);
 		$user_id=mysqli_real_escape_string($conn,$_SESSION['id']);

@@ -25,10 +25,20 @@ if (isset($_POST['com'])) {
  	}
  	
 }
-if (isset($_POST['like'])) {
- 	$like= new Like($_POST);
- 	$like->postlike();
- }
+ if (isset($_POST['like'])) {
+	$like= new Like($_POST);
+	$getlikes=$like->GetLike();
+	if (empty($getlikes)) {
+		$postlike= new Like($_POST['post_id']);
+		$postlike->postlike();
+	}
+	
+}
+if (isset($_POST['dislike'])) {
+	$dislike= new Like($_POST['post_id']);
+	$dislike->DeleteLike();
+
+}
 if (isset($_POST['delete'])) {
  	$delete= new Post($_POST['post_id']);
  	$massage=$delete->DeletePost();
@@ -40,7 +50,7 @@ if (isset($_POST['delete'])) {
  if (isset($_POST['reply'])) {
  	
  }
-
+ $likes=Like::GetallLike();
 
 
 ?>
@@ -57,7 +67,7 @@ if (isset($_POST['delete'])) {
 		<?php foreach ($users as $user) { ?>
 		<?php if($post['user_id']==$user['id']){  ?>
 		<div>
-			<b><?php echo $user['username'];  ?></b>
+		<a href="user_page.php?id=<?php echo $user['id'];?>"><b><?php echo $user['username'];  ?></b></a>
 		</div>
 		
 		<div>
@@ -82,7 +92,32 @@ if (isset($_POST['delete'])) {
 		</div>
 		<div>
 			<form action="" method="post">
-			<button tyoe="submit" name="like">Like</button>
+			<?php 
+				$like_user_id=[];
+				$lik=[];
+				foreach($likes as $like){
+					if($like['post_id']==$post['id']){
+						array_push($lik,$like);	
+						$user_like=$like['user_id'];
+						array_push($like_user_id,$user_like);
+						
+						if ($like['user_id']==$_SESSION['id']) {
+							
+						}
+					}
+				}
+					$like_num=count($lik);
+					if (in_array($_SESSION['id'],$like_user_id)) {
+						$like_user=true;
+					}else{
+						$like_user=false;
+					}
+				?>
+			<?php if($like_user!=true){ ?>
+			<button tyoe="submit" name="like">Like(<?php echo $like_num; ?>)</button>
+			<?php }else{ ?>
+			<button tyoe="submit" name="dislike">Dislike(<?php echo $like_num; ?>)</button>
+			<?php } ?>
 			<input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
 		<?php if($user['id']==$_SESSION['id']){?>
 			<button tyoe="submit" name="edit">Edit</button>
@@ -129,7 +164,7 @@ if (isset($_POST['delete'])) {
 	<?php } ?>
 	<?php } ?>
 	<div>
-		<form method="post" action="<?php echo $_SERVER['PHP_SELF'].'?id='.$post_id; ?>">
+		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 			<center>
 			<div class="success"><?php echo $message??''; ?></div>
 			<textarea class="text" id="comment"  name="comment" cols="60" rows="3" placeholder="Write your comment"></textarea>

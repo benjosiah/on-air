@@ -20,10 +20,14 @@ if (!isset($_SESSION['id'])) {
 	$filenamenew="POP".uniqid('',true).$index.'.'.$fileExt;
  	$validation= new PoatValidaion($_POST);
  	$error=$validation->validation();
- 	if(empty($error['post']) || $fileerror===0) {
-		
+ 	if(empty($error['post'])||!empty($filename)) {
+		if ($fileerror==0) {
 			$filedest="postsfiles/".$filenamenew;
 			move_uploaded_file($fileTemp,$filedest);
+		}else{
+			$filedest='';
+		}
+		
 		
  		if ($_POST['user_id']==$_SESSION['id']) {
  			$post= new Post($_POST);
@@ -88,7 +92,7 @@ if (!isset($_SESSION['id'])) {
 		<?php foreach ($users as $user) {?>
 		<?php if ($user['id']==$post['user_id']) {?>
 	<div>
-		<h4><?php echo nl2br($user['username']); ?></h4>
+		<a href="user_page.php?id=<?php echo $user['id'];?>"><h4><?php echo nl2br($user['username']); ?></h4></a>
 	</div>
 	<a href="post_comment.php?id=<?php echo $post['id'];?>">
 		<div>
@@ -109,10 +113,10 @@ if (!isset($_SESSION['id'])) {
 			if (!empty($post['post'])) {
 				if (strlen($post['post'])<=50) {
 					echo nl2br($post['post']). "<br>";
-					echo strlen($post['post']);
+					
 				}else{
 					echo nl2br(substr($post['post'],0,50))."... <br>";
-					echo strlen($post['post']);
+					
 				}
 			}
 			  ?>

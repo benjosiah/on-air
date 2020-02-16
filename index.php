@@ -7,11 +7,11 @@
   if (isset($_POST['reg'])) {
   	$validate= new Uservalidation($_POST);
   	$error= $validate->validateform(); 
-  			print_r($error);
+  			
   		if(empty($error['username'])&&empty($error['email'])&&empty($error['password'])&&empty($error['confirm_password'])){
   			$user= new User($_POST);
-  			$message=$user->PostUser();
-  			echo $message;
+			  $message=$user->PostUser();
+			  header('location:signin.php');
   			
   		}
 	}
@@ -22,7 +22,7 @@
 <div class="contaier">
 	<h3>SIGN UP</h3>
 	<div class="success">
-		<!-- // <?php echo $message; ?> -->
+		<?php echo $message??''; ?>
 	</div>
 	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="">
 		<label>Name: </label><br>

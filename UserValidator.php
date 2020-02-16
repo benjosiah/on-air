@@ -30,7 +30,7 @@ class Uservalidation
 			$error='username field should not be empty!!';
 			$this->errors['username']=$error;
 		}else{
-			if (!preg_match('/^[a-zA-Z0-9]{6,12}$/', $val)) {
+			if (!preg_match('/^[a-zA-Z0-9\s]{6,12}$/', $val)) {
 				$error='username is not valid!!';
 				$this->errors['username']=$error;
 			}
